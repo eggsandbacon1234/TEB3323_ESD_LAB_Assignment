@@ -40,6 +40,59 @@ def startup():
         else:
             print("Invalid choice.")
 
+#Function to add product to the csv
+def add_product():
+
+    print("\n=== Add Product ===")
+
+    while True:
+        product_id = input("Enter Product ID: ")
+
+        if product_id == "":
+            print("Product ID cannot be empty.")
+        else:
+            break
+
+    while True:
+        product_name = input("Enter Product Name: ")
+
+        if product_name == "":
+            print("Product name cannot be empty.")
+        else:
+            break
+
+    while True:
+
+        try:
+            unit_price = float(input("Enter Unit Price: "))
+
+            if unit_price < 0:
+                print("Price cannot be negative.")
+                continue
+
+            break
+
+        except ValueError:
+            print("Invalid price. Please enter a valid number.")
+
+    while True:
+
+        try:
+            stock_qty = int(input("Enter Stock Quantity: "))
+
+            if stock_qty < 0:
+                print("Stock quantity cannot be negative.")
+                continue
+
+            break
+
+        except ValueError:
+            print("Invalid stock quantity. Please enter a whole number.")
+
+    print("\nProduct Added Successfully!")
+
+    input("\nPress Enter to return to menu...")
+
 
 #The CLI display menu function.
 def display_menu():
@@ -61,7 +114,7 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            print("Add Product Selected")
+            add_product() #call add product function
 
         elif choice == "2":
             print("View Products Selected")
@@ -81,5 +134,5 @@ def main():
 
         else:
             print("Invalid menu choice!")
-        input("\nPress Enter to continue...")
+            input("\nPress Enter to continue...")
 main() #Run the main function
