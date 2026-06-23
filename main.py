@@ -50,6 +50,22 @@ def add_product():
 
         if product_id == "":
             print("Product ID cannot be empty.")
+            continue
+
+        duplicate_found = False
+
+        with open("inventory.csv", "r") as file:
+            reader = csv.reader(file)
+
+            next(reader)  # Skip header row
+
+            for row in reader:
+                if row[0] == product_id:
+                    duplicate_found = True
+                    break
+
+        if duplicate_found:
+            print("Product ID already exists.")
         else:
             break
 
@@ -103,17 +119,20 @@ def add_product():
 
     input("\nPress Enter to return to menu...")
 
-def view_products(): #Function to view the products that we already added
+def view_products(): #function to view the products stored in the csv
 
     print("\n=== All Products ===\n")
 
     with open("inventory.csv", "r") as file:
         reader = csv.reader(file)
 
-        next(reader)  # Skip the header row
+        next(reader)  # Skip header row
+
+        print(f"{'ID':<10}{'NAME':<20}{'PRICE':<15}{'STOCK':<10}") #Print it in a better style
+        print("-" * 55)
 
         for row in reader:
-            print(row)
+            print(f"{row[0]:<10}{row[1]:<20}{row[2]:<15}{row[3]:<10}")
 
     input("\nPress Enter to return to menu...")
 
