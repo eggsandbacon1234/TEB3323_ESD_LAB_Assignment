@@ -89,10 +89,33 @@ def add_product():
         except ValueError:
             print("Invalid stock quantity. Please enter a whole number.")
 
+    with open("inventory.csv", "a", newline="") as file:
+        writer = csv.writer(file)
+
+        writer.writerow([
+            product_id,
+            product_name,
+            unit_price,
+            stock_qty
+    ])
+
     print("\nProduct Added Successfully!")
 
     input("\nPress Enter to return to menu...")
 
+def view_products(): #Function to view the products that we already added
+
+    print("\n=== All Products ===\n")
+
+    with open("inventory.csv", "r") as file:
+        reader = csv.reader(file)
+
+        next(reader)  # Skip the header row
+
+        for row in reader:
+            print(row)
+
+    input("\nPress Enter to return to menu...")
 
 #The CLI display menu function.
 def display_menu():
@@ -114,10 +137,10 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            add_product() #call add product function
+            add_product() #call add product function if option 1 is selected
 
         elif choice == "2":
-            print("View Products Selected")
+            view_products() #call the view product function if option 2 is selected 
 
         elif choice == "3":
             print("Search Product Selected")

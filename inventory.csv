@@ -1,1 +1,4 @@
 product_id,product_name,unit_price,stock_qty
+P01,Computer,1200.0,20
+P02,Mouse,20.0,20
+P03,Monitor,50.0,100
