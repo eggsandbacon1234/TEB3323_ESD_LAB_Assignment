@@ -136,6 +136,150 @@ def view_products(): #function to view the products stored in the csv
 
     input("\nPress Enter to return to menu...")
 
+def search_product(): #Function to search the product in the csv file
+
+    print("\n=== Search Product ===\n")
+
+    search_term = input("Enter Product ID or Product Name: ")
+
+    found = False
+
+    with open("inventory.csv", "r") as file:
+        reader = csv.reader(file)
+
+        next(reader)  # Skip header
+
+        for row in reader:
+
+            if row[0] == search_term or row[1].lower() == search_term.lower():
+
+                print("\nProduct Found!\n")
+                print(f"ID: {row[0]}")
+                print(f"Name: {row[1]}")
+                print(f"Price: {row[2]}")
+                print(f"Stock: {row[3]}")
+
+                found = True
+                break
+
+    if not found:
+        print("\nProduct not found.")
+
+    input("\nPress Enter to return to menu...")
+
+def adjust_stock(): #Function to adjust the stock value in the csv file
+
+    print("\n=== Adjust Stock ===\n")
+
+    product_id = input("Enter Product ID: ")
+
+    products = []
+    found = False
+
+    with open("inventory.csv", "r") as file:
+        reader = csv.reader(file)
+
+        header = next(reader)
+
+        for row in reader:
+            products.append(row)
+
+    for product in products:
+
+        if product[0] == product_id:
+
+            found = True
+
+            print(f"\nCurrent Stock: {product[3]}")
+
+            print("\n1. Increase Stock")
+            print("2. Decrease Stock")
+
+            choice = input("Select option: ")
+
+            while True:
+
+                try:
+                    quantity = int(input("Enter Quantity: "))
+
+                    if quantity < 0:
+                        print("Quantity cannot be negative.")
+                        continue
+
+                    break
+
+                except ValueError:
+                    print("Invalid quantity.")
+
+            current_stock = int(product[3])
+
+            if choice == "1":
+                product[3] = str(current_stock + quantity)
+
+            elif choice == "2":
+
+                if current_stock - quantity < 0:
+                    print("Stock cannot go below zero.")
+
+                    input("\nPress Enter to continue...")
+                    return
+
+                product[3] = str(current_stock - quantity)
+
+            else:
+                print("Invalid option.")
+
+                input("\nPress Enter to continue...")
+                return
+
+            break
+
+    if not found:
+        print("Product not found.")
+
+        input("\nPress Enter to continue...")
+        return
+
+    with open("inventory.csv", "w", newline="") as file:
+
+        writer = csv.writer(file)
+
+        writer.writerow(header)
+
+        writer.writerows(products)
+
+    print("\nStock updated successfully!")
+
+    input("\nPress Enter to return to menu...")
+
+def low_stock_alert(): #Function to detect low stock alert.
+
+    print("\n=== Low Stock Alert ===\n")
+
+    low_stock_found = False
+
+    with open("inventory.csv", "r") as file:
+        reader = csv.reader(file)
+
+        next(reader)
+
+        for row in reader:
+
+            if int(row[3]) < 5:
+
+                low_stock_found = True
+
+                print(
+                    f"ID: {row[0]} | "
+                    f"Name: {row[1]} | "
+                    f"Stock: {row[3]}"
+                )
+
+    if not low_stock_found:
+        print("No low stock items found.")
+
+    input("\nPress Enter to return to menu...")
+
 #The CLI display menu function.
 def display_menu():
     print("\n===== Inventory Management System =====")
@@ -162,13 +306,13 @@ def main():
             view_products() #call the view product function if option 2 is selected 
 
         elif choice == "3":
-            print("Search Product Selected")
+            search_product() #call the search product function when option 3 is selexted.
 
         elif choice == "4":
-            print("Adjust Stock Selected")
+            adjust_stock() #call the adjust stock function when option 4 is selected.
 
         elif choice == "5":
-            print("Low Stock Alert Selected")
+            low_stock_alert() #call the low stock alert function
 
         elif choice == "6":
             print("Exiting System...")
