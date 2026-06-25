@@ -28,17 +28,21 @@ def startup():
         print("1. Load Existing Inventory")
         print("2. Create New Inventory")
 
-        choice = input("Enter choice: ")
+        while True:
 
-        if choice == "1":
-            print("Loading inventory...")
+            choice = input("Enter choice: ")
 
-        elif choice == "2":
-            create_inventory_file()
-            print("New inventory created.")
+            if choice == "1":
+                print("Loading inventory...")
+                break
 
-        else:
-            print("Invalid choice.")
+            elif choice == "2":
+                create_inventory_file()
+                print("New inventory created.")
+                break
+
+            else:
+                print("Invalid choice.")
 
 #Function to add product to the csv
 def add_product():
@@ -123,16 +127,24 @@ def view_products(): #function to view the products stored in the csv
 
     print("\n=== All Products ===\n")
 
-    with open("inventory.csv", "r") as file:
-        reader = csv.reader(file)
+    try:
 
-        next(reader)  # Skip header row
+        with open("inventory.csv", "r") as file:
+            reader = csv.reader(file)
 
-        print(f"{'ID':<10}{'NAME':<20}{'PRICE':<15}{'STOCK':<10}") #Print it in a better style
-        print("-" * 55)
+            next(reader)
 
-        for row in reader:
-            print(f"{row[0]:<10}{row[1]:<20}{row[2]:<15}{row[3]:<10}")
+            print(f"{'ID':<10}{'NAME':<20}{'PRICE':<15}{'STOCK':<10}")
+            print("-" * 55)
+
+            for row in reader:
+                print(f"{row[0]:<10}{row[1]:<20}{row[2]:<15}{row[3]:<10}")
+
+    except FileNotFoundError:
+        print("Error: inventory.csv not found.")
+
+    except Exception:
+        print("Error: inventory.csv may be corrupted.")
 
     input("\nPress Enter to return to menu...")
 
@@ -144,23 +156,31 @@ def search_product(): #Function to search the product in the csv file
 
     found = False
 
-    with open("inventory.csv", "r") as file:
-        reader = csv.reader(file)
+    try:
 
-        next(reader)  # Skip header
+        with open("inventory.csv", "r") as file:
+            reader = csv.reader(file)
 
-        for row in reader:
+            next(reader)
 
-            if row[0] == search_term or row[1].lower() == search_term.lower():
+            for row in reader:
 
-                print("\nProduct Found!\n")
-                print(f"ID: {row[0]}")
-                print(f"Name: {row[1]}")
-                print(f"Price: {row[2]}")
-                print(f"Stock: {row[3]}")
+                if row[0] == search_term or row[1].lower() == search_term.lower():
 
-                found = True
-                break
+                    print("\nProduct Found!\n")
+                    print(f"ID: {row[0]}")
+                    print(f"Name: {row[1]}")
+                    print(f"Price: {row[2]}")
+                    print(f"Stock: {row[3]}")
+
+                    found = True
+                    break
+
+    except FileNotFoundError:
+        print("Error: inventory.csv not found.")
+
+    except Exception:
+        print("Error: inventory.csv may be corrupted.")
 
     if not found:
         print("\nProduct not found.")
@@ -176,13 +196,25 @@ def adjust_stock(): #Function to adjust the stock value in the csv file
     products = []
     found = False
 
-    with open("inventory.csv", "r") as file:
-        reader = csv.reader(file)
+    try:
 
-        header = next(reader)
+        with open("inventory.csv", "r") as file:
+            reader = csv.reader(file)
 
-        for row in reader:
-            products.append(row)
+            header = next(reader)
+
+            for row in reader:
+                products.append(row)
+
+    except FileNotFoundError:
+        print("Error: inventory.csv not found.")
+        input("\nPress Enter to continue...")
+        return
+
+    except Exception:
+        print("Error: inventory.csv may be corrupted.")
+        input("\nPress Enter to continue...")
+        return
 
     for product in products:
 
