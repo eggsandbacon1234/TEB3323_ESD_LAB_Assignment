@@ -346,11 +346,11 @@ def main():
         elif choice == "5":
             low_stock_alert() #call the low stock alert function
 
-        elif choice == "6":
+        elif choice == "6": #Terminates the program if option 6 is selected.
             print("Exiting System...")
             break
 
-        else:
+        else: #if invalid option is 
             print("Invalid menu choice!")
             input("\nPress Enter to continue...")
 main() #Run the main function
